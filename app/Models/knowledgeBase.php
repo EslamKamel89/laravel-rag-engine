@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[Fillable(["title", "original_filename", "file_path", "status", "error_message"])]
-class knowledgeBase extends Model {
+class KnowledgeBase extends Model {
     /** @use HasFactory<\Database\Factories\KnowledgeBaseFactory> */
     use HasFactory;
 
