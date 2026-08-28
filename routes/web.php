@@ -6,9 +6,7 @@ Route::get('/', fn() => redirect()->route('knowledge-bases.index'));
 //
 Route::livewire('/admin/knowledge-base', 'pages::admin.knowledge-base-admin')
     ->name('knowledge-bases.index');
-Route::get('/admin/knowledge-base/create', fn() => 'Not implemented yet')
+Route::livewire('/admin/knowledge-base/create', 'pages::admin.knowledge-base-create')
     ->name('knowledge-bases.create');
-Route::get(
-    '/admin/knowledge-base/{knowledgeBase}',
-    fn() => 'Not implemented yet'
-)->name('knowledge-bases.show');
+Route::livewire('/admin/knowledge-base/{knowledgeBase}', 'pages::admin.knowledge-base-show')
+    ->name('knowledge-bases.show');

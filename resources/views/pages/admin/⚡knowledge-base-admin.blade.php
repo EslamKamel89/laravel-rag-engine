@@ -28,7 +28,7 @@ new #[Layout('layouts.app')] #[Title('Knowledge Base')]  class extends Component
             Knowledge Base Admin
         </h1>
 
-        <a
+        <a wire:navigate
             href="{{ route('knowledge-bases.create') }}"
             class="inline-flex items-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100">
             <svg
@@ -56,6 +56,7 @@ new #[Layout('layouts.app')] #[Title('Knowledge Base')]  class extends Component
         </p>
 
         <a
+            wire:navigate
             href="{{ route('knowledge-bases.create') }}"
             class="text-sm font-medium text-violet-600 hover:underline dark:text-violet-400">
             Upload your first one
@@ -154,13 +155,52 @@ new #[Layout('layouts.app')] #[Title('Knowledge Base')]  class extends Component
                     </td>
 
                     <td class="px-6 py-4 text-right">
-                        <button
-                            type="button"
-                            wire:click="delete({{ $knowledgeBase->id }})"
-                            wire:confirm="Are you sure you want to delete this document?"
-                            class="text-sm font-medium text-red-600 hover:text-red-500 dark:text-red-400">
-                            Delete
-                        </button>
+                        <div class="inline-flex items-center gap-2">
+                            <a
+                                href="{{ route('knowledge-bases.show', $knowledgeBase) }}"
+                                wire:navigate
+                                class="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.8"
+                                    stroke="currentColor"
+                                    class="h-4 w-4">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z" />
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+
+                                Show
+                            </a>
+
+                            <button
+                                type="button"
+                                wire:click="delete({{ $knowledgeBase->id }})"
+                                wire:confirm="Are you sure you want to delete this document?"
+                                class="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-700 transition-colors hover:bg-red-100 hover:text-red-800 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400 dark:hover:bg-red-500/20 dark:hover:text-red-300">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.8"
+                                    stroke="currentColor"
+                                    class="h-4 w-4">
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M6 7.5h12m-10.5 0v10.875A1.875 1.875 0 0 0 9.375 20.25h5.25a1.875 1.875 0 0 0 1.875-1.875V7.5m-7.5 0V5.625A1.875 1.875 0 0 1 10.875 3.75h2.25A1.875 1.875 0 0 1 15 5.625V7.5m-6 3v6m3-6v6m3-6v6" />
+                                </svg>
+
+                                Delete
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 @endforeach
