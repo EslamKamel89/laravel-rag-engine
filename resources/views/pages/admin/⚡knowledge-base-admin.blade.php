@@ -2,6 +2,7 @@
 
 use App\Models\KnowledgeBase;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -11,7 +12,9 @@ use Livewire\Component;
 new #[Layout('layouts.app')] #[Title('Knowledge Base')]  class extends Component {
 
     public function delete(int $id) {
-        KnowledgeBase::findOrFail($id)->delete();
+        $knowledgeBase = KnowledgeBase::findOrFail($id);
+        Storage::disk('public')->delete($knowledgeBase->file_path);
+        $knowledgeBase->delete();
     }
     #[Computed]
     public function knowledgeBases() {
