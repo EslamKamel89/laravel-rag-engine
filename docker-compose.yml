@@ -1,6 +1,6 @@
 services:
     pgvector:
-        build: .
+        build: ./docker/postgres
         container_name: pgvectorapp_db
         environment:
             POSTGRES_DB: laravelappdb
@@ -9,7 +9,7 @@ services:
         ports:
             - "5432:5432"
         volumes:
-            - ./data/postgres:/var/lib/postgresql/data
+            - ./docker/postgres/data/postgres:/var/lib/postgresql/data
     pgadmin:
         image: dpage/pgadmin4:latest
         container_name: pgvectorapp_pgadmin
@@ -19,6 +19,6 @@ services:
         ports:
             - "8080:80"
         volumes:
-            - ./data/pgadmin:/var/lib/pgadmin
+            - ./docker/postgres/data/pgadmin:/var/lib/pgadmin
         depends_on:
             - pgvector

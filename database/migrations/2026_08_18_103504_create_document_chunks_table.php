@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('knowledge_base_id')->constrained()->cascadeOnDelete();
             $table->text('content');
-            $table->vector('embedding', dimensions: 768);
+            $table->vector('embedding', dimensions: 1536);
             $table->timestamps();
         });
     }

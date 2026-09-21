@@ -30,4 +30,8 @@ class KnowledgeBase extends Model {
     public function chunks(): HasMany {
         return $this->hasMany(DocumentChunk::class);
     }
+
+    public function storagePath(): string {
+        return storage_path('/app/public/' . $this->file_path);
+    }
 }

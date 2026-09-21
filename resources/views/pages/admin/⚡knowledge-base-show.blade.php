@@ -8,7 +8,7 @@ use Livewire\Component;
 new #[Layout('layouts.app')] #[Title('knowledge Show')] class extends Component {
     public KnowledgeBase $knowledgeBase;
     public function mount(KnowledgeBase $knowledgeBase) {
-        $this->knowledgeBase = $knowledgeBase;
+        $this->knowledgeBase = $knowledgeBase->loadCount('chunks');
     }
 };
 ?>
@@ -248,7 +248,7 @@ new #[Layout('layouts.app')] #[Title('knowledge Show')] class extends Component 
                         </dt>
 
                         <dd class="mt-1 text-sm font-medium text-gray-900 dark:text-gray-100">
-                            —
+                            {{ $knowledgeBase->chunks_count ?? 0}}
                         </dd>
                     </div>
 

@@ -18,9 +18,10 @@ new #[Layout('layouts.app')] #[Title('Knowledge Base')]  class extends Component
     }
     #[Computed]
     public function knowledgeBases() {
-        return KnowledgeBase::query()
+        return (KnowledgeBase::query()
+            ->withCount('chunks')
             ->latest()
-            ->get();
+            ->get());
     }
 };
 ?>
@@ -153,8 +154,7 @@ new #[Layout('layouts.app')] #[Title('Knowledge Base')]  class extends Component
                     </td>
 
                     <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                        {{-- Populated when RAG chunking is implemented --}}
-                        —
+                        {{ $knowledgeBase->chunks_count ?? 0 }}
                     </td>
 
                     <td class="px-6 py-4 text-right">

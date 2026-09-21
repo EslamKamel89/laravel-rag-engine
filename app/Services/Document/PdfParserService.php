@@ -5,7 +5,7 @@ namespace App\Services\Document;
 use Exception;
 use Smalot\PdfParser\Parser;
 
-class PHPParserService {
+class PdfParserService {
     public function __construct(protected Parser $parser) {
     }
 
