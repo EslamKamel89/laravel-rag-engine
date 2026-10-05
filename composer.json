@@ -34,7 +34,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "App\\Helpers\\rag.php"
+            "App\\Helpers\\rag.php",
+            "App\\Helpers\\utils.php"
         ]
     },
     "autoload-dev": {

@@ -30,7 +30,7 @@ new #[Layout('layouts.app')] #[Title('Knowledge Base Create')] class extends Com
             'status' => KnowledgeBaseStatus::GENERATING,
         ]);
         IndexKnowledgeBaseJob::dispatch($knowledgeBase);
-        $this->redirect(route('knowledge-bases.show', $knowledgeBase), navigate: true);
+        $this->redirect(route('admin.knowledge-bases.show', $knowledgeBase), navigate: true);
     }
 };
 ?>
@@ -42,7 +42,7 @@ new #[Layout('layouts.app')] #[Title('Knowledge Base Create')] class extends Com
         <div class="mb-8">
             <a
                 wire:navigate
-                href="{{ route('knowledge-bases.index') }}"
+                href="{{ route('admin.knowledge-bases.index') }}"
                 class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -201,7 +201,7 @@ new #[Layout('layouts.app')] #[Title('Knowledge Base Create')] class extends Com
                 <div class="flex flex-col-reverse gap-3 border-t border-gray-200 bg-gray-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-end dark:border-gray-800 dark:bg-gray-950/50">
 
                     <a
-                        href="{{ route('knowledge-bases.index') }}"
+                        href="{{ route('admin.knowledge-bases.index') }}"
                         class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white">
                         Cancel
                     </a>

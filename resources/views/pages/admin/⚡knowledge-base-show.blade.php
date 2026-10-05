@@ -1,14 +1,31 @@
 <?php
 
+use App\Ai\Tools\LocalVectorSearch;
 use App\Models\KnowledgeBase;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 new #[Layout('layouts.app')] #[Title('knowledge Show')] class extends Component {
     public KnowledgeBase $knowledgeBase;
+
+    #[Validate('required|string|max:1000')]
+    public string $searchQuery = '';
+    public float $minSimilarity = 0.3;
+    public ?string $searchResult = null;
     public function mount(KnowledgeBase $knowledgeBase) {
         $this->knowledgeBase = $knowledgeBase->loadCount('chunks');
+    }
+    public function similaritySearch(): void {
+        $this->validateOnly('searchQuery');
+
+        $search = new LocalVectorSearch($this->knowledgeBase->id);
+
+        $this->searchResult = $search->similaritySearch(
+            $this->searchQuery,
+            $this->minSimilarity
+        );
     }
 };
 ?>
@@ -20,7 +37,7 @@ new #[Layout('layouts.app')] #[Title('knowledge Show')] class extends Component 
         <div class="mb-8">
             <a
                 wire:navigate
-                href="{{ route('knowledge-bases.index') }}"
+                href="{{ route('admin.knowledge-bases.index') }}"
                 class="inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -256,6 +273,99 @@ new #[Layout('layouts.app')] #[Title('knowledge Show')] class extends Component 
             </div>
 
         </div>
+        <div class="mt-6 overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-900">
+            <div class="border-b border-gray-200 px-6 py-5 dark:border-gray-800">
+                <h2 class="text-base font-semibold text-gray-950 dark:text-white">
+                    Test Similarity Search
+                </h2>
 
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Search this document's indexed chunks using semantic similarity.
+                </p>
+            </div>
+
+            <form wire:submit="similaritySearch" class="p-6">
+                <div class="grid gap-4 sm:grid-cols-[1fr_180px_auto] sm:items-start">
+                    {{-- Query --}}
+                    <div>
+                        <label
+                            for="searchQuery"
+                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">
+                            Search query
+                        </label>
+
+                        <input
+                            id="searchQuery"
+                            type="text"
+                            wire:model="searchQuery"
+                            placeholder="Enter a query..."
+                            class="block w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 shadow-sm outline-none transition placeholder:text-gray-400 focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:placeholder:text-gray-600">
+
+                        @error('searchQuery')
+                        <p class="mt-2 text-xs font-medium text-red-600 dark:text-red-400">
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    {{-- Minimum similarity --}}
+                    <div>
+                        <label
+                            for="minSimilarity"
+                            class="mb-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">
+                            Min similarity
+                        </label>
+
+                        <input
+                            id="minSimilarity"
+                            type="number"
+                            wire:model="minSimilarity"
+                            min="0"
+                            max="1"
+                            step="0.05"
+                            class="block w-full rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 shadow-sm outline-none transition focus:border-violet-500 focus:ring-4 focus:ring-violet-500/10 dark:border-gray-700 dark:bg-gray-950 dark:text-white">
+
+                        @error('minSimilarity')
+                        <p class="mt-2 text-xs font-medium text-red-600 dark:text-red-400">
+                            {{ $message }}
+                        </p>
+                        @enderror
+                    </div>
+
+                    {{-- Submit --}}
+                    <div class="sm:pt-7">
+                        <button
+                            type="submit"
+                            wire:loading.attr="disabled"
+                            wire:target="similaritySearch"
+                            class="inline-flex w-full items-center justify-center rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100">
+
+                            <span wire:loading.remove wire:target="similaritySearch">
+                                Search
+                            </span>
+
+                            <span wire:loading wire:target="similaritySearch">
+                                Searching...
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                    Only chunks meeting the minimum similarity score will be returned.
+                    Lower values increase recall; higher values require a stronger semantic match.
+                </p>
+            </form>
+
+            @if ($searchResult !== null)
+            <div class="border-t border-gray-200 px-6 py-5 dark:border-gray-800">
+                <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    Retrieved Context
+                </p>
+
+                <div class="whitespace-pre-wrap rounded-xl bg-gray-50 p-4 text-sm leading-6 text-gray-700 dark:bg-gray-950 dark:text-gray-300">{{ $searchResult }}</div>
+            </div>
+            @endif
+        </div>
     </div>
 </div>

@@ -24,7 +24,7 @@ class IndexKnowledgeBaseJob implements ShouldQueue {
             $chunks = chunkText($content);
             $response = Embeddings::for($chunks)
                 ->dimensions(1536)
-                ->generate(Lab::OpenAI, 'text-embedding-3-small');;
+                ->generate(Lab::OpenAI, 'text-embedding-3-small');
             foreach ($chunks as $index => $chunk) {
                 $this->knowledgeBase->chunks()->create([
                     'content' => $chunk,
